@@ -39,26 +39,26 @@ const resolvers = {
       return { token, user };
     },
 
-    saveBook: async (parent, { addBook }, context) => {
+    saveBook: async (parent, { book }, context) => {
       if (context.user) {
-        const newBook = await User.findByIdAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $push: { savedBooks: addBook } },
+          { $push: { savedBooks: book } },
           { new: true }
         );
-        return newBook;
+        return updatedUser;
       }
       throw new AuthenticationError('Not logged in');
     },
 
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
-        const deleteBook = await User.findByIdAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $pull: { savedBooks: { bookId } } },
           { new: true }
         );
-        return deleteBook;
+        return updatedUser;
       }
       throw new AuthenticationError('Not logged in');
     },
